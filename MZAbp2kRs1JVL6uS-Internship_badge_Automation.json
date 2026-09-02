@@ -1,0 +1,245 @@
+{
+  "name": "Internship badge Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "18cMrZjA-O-QnSkKLZ-_3Ir5s5M1Piz5y0NcMn-3-sCM",
+          "mode": "list",
+          "cachedResultName": "Course Completion Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18cMrZjA-O-QnSkKLZ-_3Ir5s5M1Piz5y0NcMn-3-sCM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1375595916,
+          "mode": "list",
+          "cachedResultName": "Form responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18cMrZjA-O-QnSkKLZ-_3Ir5s5M1Piz5y0NcMn-3-sCM/edit#gid=1375595916"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0ebcf43a-3d3d-4f4f-89b3-5fe600ef5659",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "dIbPlDg7fUoCbW2v",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10c36d6e-3602-47cb-8544-515df88fe5d7",
+              "name": "Timestamp",
+              "value": "={{ $json.Timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "d5ce2eb6-e696-4cde-92d1-691b7b654b04",
+              "name": "Full Name",
+              "value": "={{ $json['Full Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7e902990-74d2-477c-93f2-bb0ee1e6bab2",
+              "name": "Email Address",
+              "value": "={{ $json['Email Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "31abd051-3ef3-4a0a-8bea-39a8d355dd91",
+              "name": "Internship Domain ",
+              "value": "={{ $json['Internship Domain '] }}",
+              "type": "string"
+            },
+            {
+              "id": "f028a2fc-8f22-4fcb-89ce-70421d15dc22",
+              "name": "College Name ",
+              "value": "={{ $json['College Name '] }}",
+              "type": "string"
+            },
+            {
+              "id": "3dfac9b0-835d-4b0c-984c-97c46315fcb9",
+              "name": "Internship Duration ",
+              "value": "={{ $json['Internship Duration '] }}",
+              "type": "string"
+            },
+            {
+              "id": "49d64fb6-43f8-48d2-a9ed-f1c71eedc5f6",
+              "name": "  Start Date  ",
+              "value": "={{ $json['  Start Date  '] }}",
+              "type": "string"
+            },
+            {
+              "id": "1fa9650e-3e83-45c4-a56b-5fe8a969e780",
+              "name": "  End Date  ",
+              "value": "={{ $json['  End Date  '] }}",
+              "type": "string"
+            },
+            {
+              "id": "48d32adb-b007-457f-b442-a4ed3244a6d3",
+              "name": "  Certificate ID (Optional)  ",
+              "value": "={{ $json['  Certificate ID (Optional)  '] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        0
+      ],
+      "id": "16406fbb-b4d0-459d-ac9e-53f480f3fdf7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "=https://docs.google.com/presentation/d/1svV2V9Ud7qLJZdLkKluKIxPRruYyKpeQ0L3aCj5f5a8/edit?slide=id.p#slide=id.p",
+          "mode": "url"
+        },
+        "name": "={{$json.name}} Internship Certificate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        384,
+        0
+      ],
+      "id": "37d5a7b6-e170-4158-bf51-44178952c971",
+      "name": "Copy file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "T2Xn3hnUf5MTSs3U",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://script.google.com/macros/s/AKfycbw7y4sEXCnc-DEBTMYMRcEcQym0EmTcirLNpuIq20EjYABFQdFO0DmEzC3NtTG3mjjM/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Google Sheets Trigger').item.json['Full Name'] }}\",\n  \"email\": \"{{ $('Google Sheets Trigger').item.json['Email Address'] }}\",\n  \"college\": \"{{ $('Google Sheets Trigger').item.json['College Name '] }}\",\n  \"domain\": \"{{ $('Google Sheets Trigger').item.json['Internship Domain '] }}\",\n  \"duration\": \"{{ $('Google Sheets Trigger').item.json['Internship Duration '] }}\",\n  \"certificateID\":\"{{ $('Google Sheets Trigger').item.json['  Certificate ID (Optional)  '] }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        528,
+        0
+      ],
+      "id": "bac9cc8a-be43-486d-b7de-33b67488e765",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$node[\"Edit Fields\"].json[\"Email Address\"]}}",
+        "subject": "Your Internship Certificate",
+        "message": "=Dear{{ $('Google Sheets Trigger').item.json['Full Name'] }},  Congratulations!  Your Internship Certificate has been successfully generated.  You can download it using the link below:  {{$json[\"pdfLink\"]}}  Thank you.  Best Regards, Training Team\n{{ $json.pdfLink }}\n",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": []
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "6a35d47c-3871-4119-aabe-7a0d76d130d1",
+      "name": "Send a message",
+      "webhookId": "d6ec91fe-4599-4827-96e5-4653cb26ed85",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "syh8cTGV4XIqp4nG",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Copy file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copy file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
